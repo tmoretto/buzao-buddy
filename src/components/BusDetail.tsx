@@ -278,7 +278,20 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
         ...findTransitNearRoute(routePoints),
         ...findTransitByTerminalName([bus.origin, bus.destination]),
       ]);
-      // Sort by distance from the user's location
+      // Sort by position along the route (closest shape point index)
+      if (shape && shape.length > 0) {
+        const positionOnRoute = (lat: number, lng: number) => {
+          let minDist = Infinity;
+          let bestIdx = 0;
+          for (let i = 0; i < shape.length; i++) {
+            const d = (shape[i][0] - lng) ** 2 + (shape[i][1] - lat) ** 2;
+            if (d < minDist) { minDist = d; bestIdx = i; }
+          }
+          return bestIdx;
+        };
+        return connections.sort((a, b) => positionOnRoute(a.lat, a.lng) - positionOnRoute(b.lat, b.lng));
+      }
+      // Fallback: sort by distance from user
       return connections.sort((a, b) =>
         haversineDistance(userLat, userLng, a.lat, a.lng) -
         haversineDistance(userLat, userLng, b.lat, b.lng)
