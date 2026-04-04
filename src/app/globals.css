@@ -7,7 +7,59 @@
 body {
   background-color: #0F1419;
   color: #E8ECEF;
+  font-family: var(--font-ui), sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+.font-signage {
+  font-family: var(--font-signage), sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.font-signage-wide {
+  font-family: var(--font-signage), sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.font-signage-tight {
+  font-family: var(--font-signage), sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel-grid {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 72px 100%, 100% 44px;
+}
+
+.board-pill {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.board-value {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  text-shadow: 0 0 16px rgba(255, 184, 0, 0.14);
+}
+
+.ticker-flash {
+  animation: boardTick 320ms ease-out;
+}
+
+.status-pulse {
+  animation: statusBeacon 1.8s ease-in-out infinite;
 }
 
 @keyframes slideUp {
@@ -24,4 +76,32 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes boardTick {
+  0% {
+    opacity: 0.35;
+    transform: translateY(-10%) scaleY(0.92);
+    filter: blur(0.5px);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(3%) scaleY(1.04);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes statusBeacon {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
 }

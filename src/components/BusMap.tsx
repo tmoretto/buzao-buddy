@@ -148,8 +148,8 @@ export function BusMap({
                 }}
               >
                 <span
-                  className="text-xs font-bold"
-                  style={{ color: "#0F1419", fontFamily: "monospace" }}
+                  className="font-signage-tight text-xs font-bold"
+                  style={{ color: "#0F1419" }}
                 >
                   {bus.line}
                 </span>

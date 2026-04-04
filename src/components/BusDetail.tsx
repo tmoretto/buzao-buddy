@@ -65,26 +65,37 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: "#0F1419" }}>
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 shrink-0" style={{ backgroundColor: "#1A2332" }}>
-        <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8ECEF" strokeWidth="2">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <div
-          className="flex items-center justify-center rounded-lg font-bold px-3 py-1"
-          style={{ backgroundColor: "#FFB800", color: "#0F1419", fontFamily: "monospace", fontSize: 16 }}
-        >
-          {bus.line}
+      <div className="panel-grid px-4 py-3 shrink-0" style={{ backgroundColor: "#111923" }}>
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="board-pill p-1.5 rounded-lg hover:bg-white/10 transition-colors">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E8ECEF" strokeWidth="2">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <div
+            className="font-signage-tight flex items-center justify-center rounded-lg font-bold px-3 py-1"
+            style={{ backgroundColor: "#FFB800", color: "#0F1419", fontSize: 16 }}
+          >
+            {bus.line}
+          </div>
+          <div className="flex flex-col min-w-0 flex-1">
+            <span className="font-signage-tight text-sm font-semibold truncate" style={{ color: "#E8ECEF" }}>
+              {bus.destination}
+            </span>
+            <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+              {loading
+                ? "Carregando rota"
+                : `${stopsNearby.length} paradas em 2km · ${vehicles.length} veículos`}
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col min-w-0">
-          <span className="text-sm font-semibold truncate" style={{ color: "#E8ECEF" }}>
-            → {bus.destination}
+
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <span className="font-signage-wide text-[11px] font-semibold" style={{ color: "#00A651" }}>
+            Painel da linha
           </span>
-          <span className="text-xs" style={{ color: "#6B7D8E" }}>
-            {loading
-              ? "Carregando rota..."
-              : `${stopsNearby.length} paradas em 2km · ${vehicles.length} veículos`}
+          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            raio operacional 2km
           </span>
         </div>
       </div>
@@ -138,8 +149,8 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
               <Marker key={`v-${v.p}`} longitude={v.px} latitude={v.py} anchor="center">
                 <div className="flex flex-col items-center">
                   <div
-                    className="rounded-lg px-1.5 py-0.5 text-xs font-bold shadow-lg"
-                    style={{ backgroundColor: "#FFB800", color: "#0F1419", fontFamily: "monospace" }}
+                    className="font-signage-tight rounded-lg px-1.5 py-0.5 text-xs font-bold shadow-lg"
+                    style={{ backgroundColor: "#FFB800", color: "#0F1419" }}
                   >
                     {bus.line}
                   </div>
@@ -158,7 +169,7 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
           </Map>
         ) : (
           <div className="h-full flex items-center justify-center px-4 text-center" style={{ backgroundColor: "#1A2332" }}>
-            <p className="text-sm" style={{ color: "#6B7D8E" }}>
+            <p className="font-signage text-[10px] max-w-xs" style={{ color: "#6B7D8E" }}>
               Mapa indisponível. Configure NEXT_PUBLIC_MAPBOX_TOKEN no Vercel para exibir a rota e os ônibus.
             </p>
           </div>

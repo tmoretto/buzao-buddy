@@ -20,7 +20,7 @@ export function LineCard({ prediction, distanceMeters, defaultOpen = false }: Pr
   return (
     <div
       className="rounded-xl overflow-hidden transition-all duration-300"
-      style={{ backgroundColor: "#1A2332", border: "1px solid transparent" }}
+      style={{ backgroundColor: "#1A2332", border: "1px solid #ffffff0d" }}
     >
       <button
         onClick={() => setExpanded((v) => !v)}
@@ -28,22 +28,21 @@ export function LineCard({ prediction, distanceMeters, defaultOpen = false }: Pr
       >
         <div className="flex items-center gap-3">
           <div
-            className="flex items-center justify-center rounded-lg font-bold text-sm px-2"
+            className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-sm px-2"
             style={{
               backgroundColor: "#FFB800",
               color: "#0F1419",
               minWidth: 72,
               height: 32,
-              fontFamily: "monospace",
             }}
           >
             {label}
           </div>
           <div className="flex flex-col items-start">
-            <span className="text-sm" style={{ color: "#E8ECEF" }}>
+            <span className="font-signage-tight text-sm" style={{ color: "#E8ECEF" }}>
               {prediction.sl === 1 ? prediction.lt0 : prediction.lt1}
             </span>
-            <span className="text-xs" style={{ color: "#6B7D8E" }}>
+            <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
               {prediction.qv} {prediction.qv === 1 ? "veículo" : "veículos"}
             </span>
           </div>
@@ -70,7 +69,7 @@ export function LineCard({ prediction, distanceMeters, defaultOpen = false }: Pr
       </button>
 
       {expanded && (
-        <div className="px-3 pb-3 flex flex-col gap-1.5">
+        <div className="panel-grid px-3 pb-3 pt-2 flex flex-col gap-1.5" style={{ backgroundColor: "#111923" }}>
           <div className="h-px w-full" style={{ backgroundColor: "#ffffff10" }} />
           <PredictionTimeline vehicles={prediction.vs} distanceMeters={distanceMeters} />
         </div>

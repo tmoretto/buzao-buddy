@@ -1,10 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans } from "next/font/google";
+import { Barlow_Condensed, Barlow_Semi_Condensed } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
+const barlowSemiCondensed = Barlow_Semi_Condensed({
   subsets: ["latin"],
+  display: "swap",
   weight: ["400", "500", "600", "700"],
+  variable: "--font-ui",
+});
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600", "700"],
+  variable: "--font-signage",
 });
 
 export const metadata: Metadata = {
@@ -23,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${dmSans.className} h-full`}>
+    <html lang="pt-BR" className={`${barlowSemiCondensed.variable} ${barlowCondensed.variable} ${barlowSemiCondensed.className} h-full`}>
       <body className="h-full" style={{ backgroundColor: "#0F1419" }}>
         {children}
       </body>

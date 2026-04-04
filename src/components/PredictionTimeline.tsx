@@ -47,6 +47,7 @@ function VehicleRow({ vehicle, walkMin }: VehicleRowProps) {
   const [countdown, setCountdown] = useState<number | null>(null);
   const arrivalColor = getArrivalColor(countdown ?? 99);
   const status = getLeaveStatus(countdown ?? 99, walkMin);
+  const countdownLabel = countdown === null ? "..." : formatMin(countdown);
 
   useEffect(() => {
     setCountdown(arrivalMinutes(vehicle.t));
@@ -59,20 +60,21 @@ function VehicleRow({ vehicle, walkMin }: VehicleRowProps) {
   return (
     <div
       className="flex items-center justify-between py-2 px-3 rounded-lg"
-      style={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+      style={{ backgroundColor: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
     >
       <div className="flex items-center gap-2.5">
         <div className="flex flex-col items-center" style={{ minWidth: 48 }}>
           <span
-            className="text-lg font-bold"
-            style={{ color: arrivalColor, fontFamily: "monospace" }}
+            key={countdownLabel}
+            className="font-signage-tight board-value ticker-flash text-lg font-bold"
+            style={{ color: arrivalColor }}
           >
-            {countdown === null ? "..." : formatMin(countdown)}
+            {countdownLabel}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="text-xs" style={{ color: "#6B7D8E" }}>
-            #{vehicle.p}
+          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            Prefixo {vehicle.p}
           </span>
           {vehicle.a && (
             <span className="text-xs" title="Acessível">
@@ -82,7 +84,8 @@ function VehicleRow({ vehicle, walkMin }: VehicleRowProps) {
         </div>
       </div>
       <span
-        className="text-xs font-medium px-2 py-0.5 rounded-full"
+        key={status.text}
+        className="font-signage board-pill ticker-flash text-[10px] font-medium px-2 py-0.5 rounded-full"
         style={{ backgroundColor: `${status.color}20`, color: status.color }}
       >
         {status.emoji} {status.text}
@@ -116,6 +119,7 @@ interface NextArrivalProps {
 export function NextArrivalBadge({ timeStr }: NextArrivalProps) {
   const [minutes, setMinutes] = useState<number | null>(null);
   const color = getArrivalColor(minutes ?? 99);
+  const label = minutes === null ? "..." : formatMin(minutes);
 
   useEffect(() => {
     setMinutes(arrivalMinutes(timeStr));
@@ -126,13 +130,14 @@ export function NextArrivalBadge({ timeStr }: NextArrivalProps) {
   }, [timeStr]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="board-pill flex items-center gap-2 rounded-full px-2 py-1">
       <PulsingDot color={color} size={8} />
       <span
-        className="text-lg font-bold"
-        style={{ color, fontFamily: "monospace" }}
+        key={label}
+        className="font-signage-tight board-value ticker-flash text-lg font-bold"
+        style={{ color }}
       >
-        {minutes === null ? "..." : formatMin(minutes)}
+        {label}
       </span>
     </div>
   );
