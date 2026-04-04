@@ -17,7 +17,7 @@ function timeSince(isoStr: string): string {
 function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected: boolean; onClick: () => void; onDetail: () => void }) {
   return (
     <div
-      className="flex items-center gap-3 rounded-xl transition-all overflow-hidden"
+      className="flex items-center gap-0 rounded-xl transition-all overflow-hidden"
       style={{
         backgroundColor: selected ? "#1e3a2a" : "#1A2332",
         border: selected ? "1px solid #00A651" : "1px solid #ffffff0d",
@@ -29,50 +29,50 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
         tabIndex={0}
         onClick={onClick}
         onKeyDown={(e) => e.key === "Enter" && onClick()}
-        className="flex flex-1 items-center gap-3 p-3 cursor-pointer min-w-0"
+        className="flex flex-1 items-center gap-4 px-4 py-3.5 cursor-pointer min-w-0"
       >
         {/* Line badge */}
         <div
-          className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-sm px-2 shrink-0"
+          className="font-signage-tight flex items-center justify-center rounded-xl font-bold text-sm px-3 shrink-0"
           style={{
             backgroundColor: selected ? "#00A651" : "#FFB800",
             color: "#0F1419",
-            minWidth: 72,
-            height: 32,
+            minWidth: 88,
+            height: 40,
           }}
         >
           {bus.line}
         </div>
 
         {/* Info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
             <span className="font-signage-tight text-sm font-medium truncate" style={{ color: "#E8ECEF" }}>
               {bus.destination}
             </span>
             {bus.accessible && <span className="text-xs shrink-0" title="Acessível">♿</span>}
           </div>
-          <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>
+          <span className="font-signage block leading-none text-[11px]" style={{ color: "#6B7D8E" }}>
             Prefixo {bus.prefixo} · GPS {timeSince(bus.lastUpdate)}
           </span>
         </div>
 
         {/* Distance */}
-        <div className="flex flex-col items-end shrink-0">
-          <div className="flex items-center gap-1">
+        <div className="flex min-w-[96px] flex-col items-end justify-center gap-1 shrink-0">
+          <div className="flex items-center gap-1.5">
             <PulsingDot color="#00A651" size={6} />
             <span className="font-signage-tight text-sm font-bold" style={{ color: "#00A651" }}>
               {bus.distance}m
             </span>
           </div>
-          <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>de você</span>
+          <span className="font-signage block leading-none text-[11px]" style={{ color: "#6B7D8E" }}>de você</span>
         </div>
       </div>
 
       {/* Detail button — separate from main tap area */}
       <button
         onClick={onDetail}
-        className="px-3 self-stretch flex items-center hover:bg-white/10 transition-colors border-l"
+        className="px-4 self-stretch flex items-center hover:bg-white/10 transition-colors border-l"
         style={{ borderColor: "#ffffff10" }}
         title="Ver rota"
       >
@@ -126,22 +126,26 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
       </div>
 
       {/* Refresh bar */}
-      <div className="panel-grid flex items-center justify-between px-4 py-2 shrink-0" style={{ backgroundColor: "#111923" }}>
-        <div className="flex items-center gap-2">
-          <PulsingDot color={error ? "#FF4444" : "#00C853"} size={6} />
-          <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>
-            {error
-              ? "Falha ao carregar ônibus"
-              : lastUpdate
-              ? `Atualizado ${lastUpdate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`
-              : loading
-              ? "Carregando"
-              : "—"}
-          </span>
+      <div className="shrink-0 px-3 py-3" style={{ backgroundColor: "#111923" }}>
+        <div className="rounded-xl border px-4 py-3" style={{ borderColor: "#ffffff10", backgroundColor: "#111923" }}>
+          <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <PulsingDot color={error ? "#FF4444" : "#00C853"} size={6} />
+              <span className="font-signage block leading-none text-[11px]" style={{ color: "#6B7D8E" }}>
+                {error
+                  ? "Falha ao carregar ônibus"
+                  : lastUpdate
+                  ? `Atualizado ${lastUpdate.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}`
+                  : loading
+                  ? "Carregando"
+                  : "—"}
+              </span>
+            </div>
+            <span className="font-signage block text-right leading-none text-[11px] shrink-0" style={{ color: "#6B7D8E" }}>
+              {buses.length} ônibus em até 600m
+            </span>
+          </div>
         </div>
-        <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>
-          {buses.length} ônibus em até 600m
-        </span>
       </div>
 
       {/* Bus list */}

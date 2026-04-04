@@ -25,14 +25,14 @@ export function NearbyStops() {
       {/* Header */}
       <div className="px-4 pt-5 pb-3" style={{ backgroundColor: "#0F1419" }}>
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-start gap-3">
             <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
+              className="mt-0.5 w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
               style={{ backgroundColor: "#FFB800", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2)" }}
             >
               🚌
             </div>
-            <div className="flex flex-col gap-0.5">
+            <div className="flex flex-col gap-0.5 justify-center">
               <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>
                 Transit Finder
               </span>
