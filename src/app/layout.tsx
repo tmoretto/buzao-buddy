@@ -19,6 +19,11 @@ const barlowCondensed = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "Buzão Buddy",
   description: "Rastreamento de ônibus em tempo real — São Paulo",
+  icons: {
+    icon: "/bus-icon.svg",
+    shortcut: "/bus-icon.svg",
+    apple: "/bus-icon.svg",
+  },
 };
 
 export const viewport: Viewport = {

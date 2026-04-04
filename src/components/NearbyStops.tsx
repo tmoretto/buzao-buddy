@@ -28,7 +28,7 @@ export function NearbyStops() {
           <div className="flex items-center gap-2.5">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
-              style={{ backgroundColor: "#FFB800" }}
+              style={{ backgroundColor: "#FFB800", boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2)" }}
             >
               🚌
             </div>
