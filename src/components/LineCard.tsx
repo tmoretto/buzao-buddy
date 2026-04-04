@@ -28,7 +28,7 @@ export function LineCard({ prediction, distanceMeters, defaultOpen = false }: Pr
       >
         <div className="flex items-center gap-3">
           <div
-            className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-base px-2"
+            className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-sm px-2"
             style={{
               backgroundColor: "#FFB800",
               color: "#0F1419",
@@ -39,10 +39,10 @@ export function LineCard({ prediction, distanceMeters, defaultOpen = false }: Pr
             {label}
           </div>
           <div className="flex flex-col items-start">
-            <span className="font-signage-tight text-base" style={{ color: "#E8ECEF" }}>
+            <span className="font-signage-tight text-sm" style={{ color: "#E8ECEF" }}>
               {prediction.sl === 1 ? prediction.lt0 : prediction.lt1}
             </span>
-            <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
+            <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>
               {prediction.qv} {prediction.qv === 1 ? "veículo" : "veículos"}
             </span>
           </div>
