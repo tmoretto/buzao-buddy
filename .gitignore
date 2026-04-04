@@ -38,4 +38,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# generated GTFS shapes (run scripts/process-gtfs.mjs to regenerate)
+/public/shapes/
 next-env.d.ts

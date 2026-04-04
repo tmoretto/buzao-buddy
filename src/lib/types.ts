@@ -72,10 +72,19 @@ export interface Posicao {
   l: LinhaPosicao[];
 }
 
+// GET /Posicao/Linha — response has vehicles directly, not nested under l[]
+export interface PosicaoLinha {
+  hr: string;
+  vs: VeiculoPosicao[];
+}
+
 export interface NearbyBus {
   line: string;       // letreiro, e.g. "715M"
   cl: number;
+  sl: number;         // sentido: 1=TP→TS, 2=TS→TP
+  gtfsId: string;     // full letreiro, e.g. "875A-10" (matches GTFS route_id)
   destination: string;
+  origin: string;
   prefixo: string;
   accessible: boolean;
   distance: number;   // meters from user
@@ -93,4 +102,18 @@ export interface PrevisaoParada {
     px: number;
     l: LinhaPrevisao[];
   };
+}
+
+// GET /Previsao/Linha — predictions at every stop for a given line
+export interface PrevisaoLinhaParada {
+  cp: number;   // stop code
+  np: string;   // stop name
+  py: number;
+  px: number;
+  vs: VeiculoPrevisao[];
+}
+
+export interface PrevisaoLinha {
+  hr: string;   // reference time
+  ps: PrevisaoLinhaParada[];
 }

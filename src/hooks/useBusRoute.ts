@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import type { Parada, Posicao, VeiculoPosicao } from "@/lib/types";
+import type { Parada, PosicaoLinha, PrevisaoLinha, PrevisaoLinhaParada, VeiculoPosicao } from "@/lib/types";
 import { haversineDistance } from "@/lib/geo";
 import { fetchJsonOrThrow } from "@/lib/http";
 
@@ -12,7 +12,6 @@ function sortStopsAsRoute(stops: Parada[], anchorLat: number, anchorLng: number)
   if (stops.length === 0) return [];
   const remaining = [...stops];
 
-  // Start from the stop closest to the user
   let anchorIdx = 0;
   let minDist = Infinity;
   remaining.forEach((s, i) => {
@@ -36,17 +35,26 @@ function sortStopsAsRoute(stops: Parada[], anchorLat: number, anchorLng: number)
   return ordered;
 }
 
+export interface StopWithPredictions extends Parada {
+  distance: number;
+  predictions: PrevisaoLinhaParada["vs"];
+}
+
 export interface BusRouteData {
-  stops: Parada[];           // all stops, route-ordered
-  stopsNearby: Parada[];     // stops within 2km of user
+  stops: Parada[];
+  stopsNearby: Parada[];
+  stopsWithPredictions: StopWithPredictions[];
   vehicles: VeiculoPosicao[];
+  shape: [number, number][] | null; // GTFS polyline [lng, lat][]
   loading: boolean;
   error: string | null;
 }
 
-export function useBusRoute(cl: number, userLat: number, userLng: number): BusRouteData {
+export function useBusRoute(cl: number, userLat: number, userLng: number, gtfsId?: string, sl?: number): BusRouteData {
   const [rawStops, setRawStops] = useState<Parada[]>([]);
-  const [posicao, setPosicao] = useState<Posicao | null>(null);
+  const [posicao, setPosicao] = useState<PosicaoLinha | null>(null);
+  const [predictions, setPredictions] = useState<PrevisaoLinha | null>(null);
+  const [shape, setShape] = useState<[number, number][] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,6 +63,8 @@ export function useBusRoute(cl: number, userLat: number, userLng: number): BusRo
     setError(null);
     setRawStops([]);
     setPosicao(null);
+    setPredictions(null);
+    setShape(null);
 
     const controller = new AbortController();
 
@@ -62,13 +72,17 @@ export function useBusRoute(cl: number, userLat: number, userLng: number): BusRo
       fetchJsonOrThrow<Parada[]>(`/api/sptrans/stops/line?cl=${cl}`, {
         signal: controller.signal,
       }),
-      fetchJsonOrThrow<Posicao>(`/api/sptrans/positions/line?cl=${cl}`, {
+      fetchJsonOrThrow<PosicaoLinha>(`/api/sptrans/positions/line?cl=${cl}`, {
         signal: controller.signal,
       }),
+      fetchJsonOrThrow<PrevisaoLinha>(`/api/sptrans/predictions/line?cl=${cl}`, {
+        signal: controller.signal,
+      }).catch(() => null),
     ])
-      .then(([stopsData, posicaoData]) => {
+      .then(([stopsData, posicaoData, predsData]) => {
         setRawStops(Array.isArray(stopsData) ? stopsData : []);
         setPosicao(posicaoData ?? null);
+        setPredictions(predsData ?? null);
       })
       .catch((err) => {
         if (err instanceof Error && err.name === "AbortError") {
@@ -82,6 +96,20 @@ export function useBusRoute(cl: number, userLat: number, userLng: number): BusRo
     return () => controller.abort();
   }, [cl]);
 
+  // Fetch GTFS shape (non-blocking, separate from main data)
+  useEffect(() => {
+    if (!gtfsId) return;
+    fetch(`/shapes/${gtfsId}.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!data) return;
+        // Olho Vivo sl=1 → GTFS direction_id=0, sl=2 → direction_id=1
+        const dirId = sl === 2 ? "1" : "0";
+        setShape(data[dirId] ?? data["0"] ?? data["1"] ?? null);
+      })
+      .catch(() => {});
+  }, [gtfsId]);
+
   const stops = useMemo(
     () => sortStopsAsRoute(rawStops, userLat, userLng),
     [rawStops, userLat, userLng]
@@ -92,11 +120,31 @@ export function useBusRoute(cl: number, userLat: number, userLng: number): BusRo
     [stops, userLat, userLng]
   );
 
-  // Flatten vehicles from all line entries in the response
+  // Build stop predictions directly from the predictions endpoint data
+  // (stop codes differ between /Parada/BuscarParadasPorLinha and /Previsao/Linha)
+  // Show all stops with predictions sorted by distance — no radius filter
+  const stopsWithPredictions = useMemo(() => {
+    return (predictions?.ps ?? [])
+      .map((ps) => {
+        const dist = Math.round(haversineDistance(userLat, userLng, ps.py, ps.px));
+        return {
+          cp: ps.cp,
+          np: ps.np,
+          ed: "",
+          py: ps.py,
+          px: ps.px,
+          distance: dist,
+          predictions: ps.vs ?? [],
+        } satisfies StopWithPredictions;
+      })
+      .filter((s) => s.predictions.length > 0)
+      .sort((a, b) => a.distance - b.distance);
+  }, [predictions, userLat, userLng]);
+
   const vehicles = useMemo(
-    () => (posicao?.l ?? []).flatMap((l) => l.vs ?? []),
+    () => posicao?.vs ?? [],
     [posicao]
   );
 
-  return { stops, stopsNearby, vehicles, loading, error };
+  return { stops, stopsNearby, stopsWithPredictions, vehicles, shape, loading, error };
 }

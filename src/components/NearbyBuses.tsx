@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNearbyBuses } from "@/hooks/useNearbyBuses";
 import { PulsingDot } from "./PulsingDot";
 import { BusMap } from "./BusMap";
 import type { NearbyBus, ParadaWithDistance } from "@/lib/types";
+import { findTransitByTerminalName, groupTransitConnections } from "@/lib/metro-stations";
 
 function timeSince(isoStr: string): string {
   const diffMs = Date.now() - new Date(isoStr).getTime();
@@ -12,6 +13,30 @@ function timeSince(isoStr: string): string {
   if (diffMin < 1) return "agora";
   if (diffMin === 1) return "1 min";
   return `${diffMin} min`;
+}
+
+function TransitBadges({ texts }: { texts: string[] }) {
+  const connections = useMemo(
+    () => groupTransitConnections(findTransitByTerminalName(texts)),
+    [texts]
+  );
+  if (connections.length === 0) return null;
+  return (
+    <>
+      {connections.map((c) => {
+        const isCptm = c.type === "cptm";
+        return (
+          <span
+            key={c.name}
+            className="font-signage-tight shrink-0 flex items-center gap-1 rounded px-1.5 py-px text-[9px] font-bold leading-tight"
+            style={{ backgroundColor: isCptm ? "#6B2D8B" : "#0052A5", color: "#fff" }}
+          >
+            {isCptm ? "CPTM" : "M"}{" "}{c.name}
+          </span>
+        );
+      })}
+    </>
+  );
 }
 
 function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected: boolean; onClick: () => void; onDetail: () => void }) {
@@ -29,28 +54,29 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
         tabIndex={0}
         onClick={onClick}
         onKeyDown={(e) => e.key === "Enter" && onClick()}
-        className="flex flex-1 items-center gap-4 px-4 py-3.5 cursor-pointer min-w-0"
+        className="flex flex-1 items-center gap-3 px-3 py-2.5 cursor-pointer min-w-0"
       >
         {/* Line badge */}
         <div
-          className="font-signage-tight flex items-center justify-center rounded-xl font-bold text-sm px-3 shrink-0"
+          className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-xs px-2.5 shrink-0"
           style={{
             backgroundColor: selected ? "#00A651" : "#FFB800",
             color: "#0F1419",
-            minWidth: 88,
-            height: 40,
+            minWidth: 72,
+            height: 32,
           }}
         >
           {bus.line}
         </div>
 
         {/* Info */}
-        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
           <div className="flex items-center gap-2">
             <span className="font-signage-tight text-sm font-medium truncate" style={{ color: "#E8ECEF" }}>
               {bus.destination}
             </span>
             {bus.accessible && <span className="text-xs shrink-0" title="Acessível">♿</span>}
+            <TransitBadges texts={[bus.destination, bus.origin]} />
           </div>
           <span className="font-signage block leading-none text-[11px]" style={{ color: "#6B7D8E" }}>
             Prefixo {bus.prefixo} · GPS {timeSince(bus.lastUpdate)}
@@ -58,7 +84,7 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
         </div>
 
         {/* Distance */}
-        <div className="flex min-w-[96px] flex-col items-end justify-center gap-1 shrink-0">
+        <div className="flex min-w-[80px] flex-col items-end justify-center gap-0.5 shrink-0">
           <div className="flex items-center gap-1.5">
             <PulsingDot color="#00A651" size={6} />
             <span className="font-signage-tight text-sm font-bold" style={{ color: "#00A651" }}>
@@ -149,7 +175,7 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
       </div>
 
       {/* Bus list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 flex flex-col gap-2">
+      <div className="flex-1 overflow-y-auto px-3 pb-3 flex flex-col gap-1.5">
         {error ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3 text-center">
             <span className="text-4xl">⚠️</span>

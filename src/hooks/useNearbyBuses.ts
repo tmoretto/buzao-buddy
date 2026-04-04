@@ -32,7 +32,10 @@ export function useNearbyBuses(lat: number | null, lng: number | null) {
             nearby.push({
               line: line.c.replace(/-\d+$/, ""),
               cl: line.cl,
+              sl: line.sl,
+              gtfsId: line.c,
               destination: line.sl === 1 ? line.lt0 : line.lt1,
+              origin: line.sl === 1 ? line.lt1 : line.lt0,
               prefixo: v.p,
               accessible: v.a,
               distance: Math.round(dist),

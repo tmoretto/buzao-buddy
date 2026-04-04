@@ -1,4 +1,4 @@
-import type { Parada, Posicao, PrevisaoParada } from "./types";
+import type { Parada, Posicao, PrevisaoLinha, PrevisaoParada } from "./types";
 
 const BASE_URL = "https://api.olhovivo.sptrans.com.br/v2.1";
 
@@ -42,21 +42,34 @@ async function ensureOk(res: Response, action: string): Promise<Response> {
   throw new SpTransError(`${action} failed with ${res.status}${details}`);
 }
 
+let authPromise: Promise<void> | null = null;
+
 export async function ensureAuthenticated(): Promise<void> {
-  const token = getToken();
-  const res = await fetch(`${BASE_URL}/Login/Autenticar?token=${token}`, {
-    method: "POST",
-    cache: "no-store",
-  });
+  // Deduplicate concurrent auth calls
+  if (authPromise) return authPromise;
 
-  await ensureOk(res, "SPTrans auth");
+  authPromise = (async () => {
+    const token = getToken();
+    const res = await fetch(`${BASE_URL}/Login/Autenticar?token=${token}`, {
+      method: "POST",
+      cache: "no-store",
+    });
 
-  const cookie = res.headers.get("set-cookie");
-  if (!cookie) {
-    throw new SpTransError("SPTrans auth failed: no cookie returned");
+    await ensureOk(res, "SPTrans auth");
+
+    const cookie = res.headers.get("set-cookie");
+    if (!cookie) {
+      throw new SpTransError("SPTrans auth failed: no cookie returned");
+    }
+
+    sessionCookie = cookie;
+  })();
+
+  try {
+    await authPromise;
+  } finally {
+    authPromise = null;
   }
-
-  sessionCookie = cookie;
 }
 
 async function fetchWithAuth(path: string): Promise<Response> {
@@ -119,6 +132,15 @@ export async function getPredictionsForLineAtStop(
 ): Promise<PrevisaoParada> {
   const res = await fetchWithAuth(
     `/Previsao?codigoParada=${codigoParada}&codigoLinha=${codigoLinha}`
+  );
+  return res.json();
+}
+
+export async function getPredictionsForLine(
+  codigoLinha: number
+): Promise<PrevisaoLinha> {
+  const res = await fetchWithAuth(
+    `/Previsao/Linha?codigoLinha=${codigoLinha}`
   );
   return res.json();
 }
