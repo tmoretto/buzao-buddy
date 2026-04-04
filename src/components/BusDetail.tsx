@@ -80,10 +80,10 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
             {bus.line}
           </div>
           <div className="flex flex-col min-w-0 flex-1">
-            <span className="font-signage-tight text-sm font-semibold truncate" style={{ color: "#E8ECEF" }}>
+            <span className="font-signage-tight text-base font-semibold truncate" style={{ color: "#E8ECEF" }}>
               {bus.destination}
             </span>
-            <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
               {loading
                 ? "Carregando rota"
                 : `${stopsNearby.length} paradas em 2km · ${vehicles.length} veículos`}
@@ -92,10 +92,10 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-3">
-          <span className="font-signage-wide text-[11px] font-semibold" style={{ color: "#00A651" }}>
+          <span className="font-signage-wide text-[13px] font-semibold" style={{ color: "#00A651" }}>
             Painel da linha
           </span>
-          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+          <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
             raio operacional 2km
           </span>
         </div>
@@ -171,17 +171,17 @@ export function BusDetail({ bus, userLat, userLng, onBack }: Props) {
             </Map>
 
             <div className="pointer-events-none absolute left-3 top-3 flex items-center gap-2">
-              <span className="font-signage-wide rounded-md px-2 py-1 text-[10px]" style={{ backgroundColor: "rgba(8, 16, 23, 0.88)", color: "#E8ECEF", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="font-signage-wide rounded-md px-2 py-1 text-[12px]" style={{ backgroundColor: "rgba(8, 16, 23, 0.88)", color: "#E8ECEF", border: "1px solid rgba(255,255,255,0.08)" }}>
                 Rota monitorada
               </span>
-              <span className="font-signage rounded-md px-2 py-1 text-[10px]" style={{ backgroundColor: "rgba(8, 16, 23, 0.78)", color: "#6B7D8E", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <span className="font-signage rounded-md px-2 py-1 text-[12px]" style={{ backgroundColor: "rgba(8, 16, 23, 0.78)", color: "#6B7D8E", border: "1px solid rgba(255,255,255,0.08)" }}>
                 cobertura 2km
               </span>
             </div>
           </div>
         ) : (
           <div className="h-full flex items-center justify-center px-4 text-center" style={{ backgroundColor: "#1A2332" }}>
-            <p className="font-signage text-[10px] max-w-xs" style={{ color: "#6B7D8E" }}>
+            <p className="font-signage text-[12px] max-w-xs" style={{ color: "#6B7D8E" }}>
               Mapa indisponível. Configure NEXT_PUBLIC_MAPBOX_TOKEN no Vercel para exibir a rota e os ônibus.
             </p>
           </div>

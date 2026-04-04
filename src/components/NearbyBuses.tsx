@@ -33,7 +33,7 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
       >
         {/* Line badge */}
         <div
-          className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-sm px-2 shrink-0"
+          className="font-signage-tight flex items-center justify-center rounded-lg font-bold text-base px-2 shrink-0"
           style={{
             backgroundColor: selected ? "#00A651" : "#FFB800",
             color: "#0F1419",
@@ -47,12 +47,12 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="font-signage-tight text-sm font-medium truncate" style={{ color: "#E8ECEF" }}>
+            <span className="font-signage-tight text-base font-medium truncate" style={{ color: "#E8ECEF" }}>
               {bus.destination}
             </span>
             {bus.accessible && <span className="text-xs shrink-0" title="Acessível">♿</span>}
           </div>
-          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+          <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
             Prefixo {bus.prefixo} · GPS {timeSince(bus.lastUpdate)}
           </span>
         </div>
@@ -61,11 +61,11 @@ function BusRow({ bus, selected, onClick, onDetail }: { bus: NearbyBus; selected
         <div className="flex flex-col items-end shrink-0">
           <div className="flex items-center gap-1">
             <PulsingDot color="#00A651" size={6} />
-            <span className="font-signage-tight text-sm font-bold" style={{ color: "#00A651" }}>
+            <span className="font-signage-tight text-base font-bold" style={{ color: "#00A651" }}>
               {bus.distance}m
             </span>
           </div>
-          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>de você</span>
+          <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>de você</span>
         </div>
       </div>
 
@@ -118,7 +118,7 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
             className="h-full flex items-center justify-center"
             style={{ backgroundColor: "#1A2332" }}
           >
-            <p className="text-sm" style={{ color: "#6B7D8E" }}>
+            <p className="text-base" style={{ color: "#6B7D8E" }}>
               GPS necessário para o mapa
             </p>
           </div>
@@ -129,7 +129,7 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
       <div className="panel-grid flex items-center justify-between px-4 py-2 shrink-0" style={{ backgroundColor: "#111923" }}>
         <div className="flex items-center gap-2">
           <PulsingDot color={error ? "#FF4444" : "#00C853"} size={6} />
-          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+          <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
             {error
               ? "Falha ao carregar ônibus"
               : lastUpdate
@@ -139,7 +139,7 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
               : "—"}
           </span>
         </div>
-        <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+        <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
           {buses.length} ônibus em até 600m
         </span>
       </div>
@@ -149,10 +149,10 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
         {error ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3 text-center">
             <span className="text-4xl">⚠️</span>
-            <p className="text-sm font-medium" style={{ color: "#E8ECEF" }}>
+            <p className="text-base font-medium" style={{ color: "#E8ECEF" }}>
               Não foi possível buscar os ônibus próximos
             </p>
-            <p className="font-signage text-[10px] max-w-xs" style={{ color: "#6B7D8E" }}>
+            <p className="font-signage text-[12px] max-w-xs" style={{ color: "#6B7D8E" }}>
               {error.includes("HTTP 502")
                 ? "Verifique no Vercel se SPTRANS_TOKEN está configurado corretamente e se a API da SPTrans está respondendo."
                 : error}
@@ -164,14 +164,14 @@ export function NearbyBuses({ lat, lng, stops, onBusDetail }: Props) {
               className="w-10 h-10 rounded-full border-2 animate-spin"
               style={{ borderColor: "#00A651", borderTopColor: "transparent" }}
             />
-            <p className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            <p className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
               Buscando ônibus próximos...
             </p>
           </div>
         ) : buses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 gap-3">
             <span className="text-4xl">🚌</span>
-            <p className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            <p className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
               Nenhum ônibus em até 600m
             </p>
           </div>

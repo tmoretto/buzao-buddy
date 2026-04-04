@@ -33,10 +33,10 @@ export function NearbyStops() {
               🚌
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+              <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
                 Transit Finder
               </span>
-              <h1 className="font-signage-wide text-xl font-bold leading-none" style={{ color: "#E8ECEF" }}>
+              <h1 className="font-signage-wide text-2xl font-bold leading-none" style={{ color: "#E8ECEF" }}>
                 Buzão Buddy
               </h1>
             </div>
@@ -44,7 +44,7 @@ export function NearbyStops() {
           <div className="board-pill flex items-center gap-1.5 rounded-full px-2.5 py-1">
             <PulsingDot color={locLoading ? "#FFB800" : "#00C853"} />
             <span
-              className="font-signage status-pulse text-[11px] font-medium"
+              className="font-signage status-pulse text-[13px] font-medium"
               style={{ color: locLoading ? "#FFB800" : "#00C853" }}
             >
               {locLoading ? "Localizando..." : lat ? "Localizado" : "Sem GPS"}
@@ -55,15 +55,15 @@ export function NearbyStops() {
 
       <div className="panel-grid px-4 py-2" style={{ backgroundColor: "#111923" }}>
         <div className="flex items-center justify-between gap-3">
-          <span className="font-signage-wide text-[11px] font-semibold" style={{ color: "#00A651" }}>
+          <span className="font-signage-wide text-[13px] font-semibold" style={{ color: "#00A651" }}>
             Buzões próximos
           </span>
           {fullAddress ? (
-            <span className="font-signage text-[10px] truncate" style={{ color: "#6B7D8E" }}>
+            <span className="font-signage text-[12px] truncate" style={{ color: "#6B7D8E" }}>
               {fullAddress}
             </span>
           ) : loading ? (
-            <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+            <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
               Buscando localização...
             </span>
           ) : null}
@@ -79,9 +79,9 @@ export function NearbyStops() {
         className="px-4 py-3 flex items-center justify-center gap-1.5"
         style={{ backgroundColor: "#1A2332", borderTop: "1px solid #ffffff08" }}
       >
-        <span className="font-signage text-[11px]" style={{ color: "#6B7D8E" }}>Dados em tempo real</span>
+        <span className="font-signage text-[13px]" style={{ color: "#6B7D8E" }}>Dados em tempo real</span>
         <span className="text-xs" style={{ color: "#ffffff15" }}>•</span>
-        <span className="font-signage text-[11px]" style={{ color: "#FFB800" }}>SPTrans Olho Vivo</span>
+        <span className="font-signage text-[13px]" style={{ color: "#FFB800" }}>SPTrans Olho Vivo</span>
       </div>
     </div>
   );

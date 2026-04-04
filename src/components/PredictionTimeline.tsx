@@ -73,7 +73,7 @@ function VehicleRow({ vehicle, walkMin }: VehicleRowProps) {
           </span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="font-signage text-[10px]" style={{ color: "#6B7D8E" }}>
+          <span className="font-signage text-[12px]" style={{ color: "#6B7D8E" }}>
             Prefixo {vehicle.p}
           </span>
           {vehicle.a && (
@@ -85,7 +85,7 @@ function VehicleRow({ vehicle, walkMin }: VehicleRowProps) {
       </div>
       <span
         key={status.text}
-        className="font-signage board-pill ticker-flash text-[10px] font-medium px-2 py-0.5 rounded-full"
+        className="font-signage board-pill ticker-flash text-[12px] font-medium px-2 py-0.5 rounded-full"
         style={{ backgroundColor: `${status.color}20`, color: status.color }}
       >
         {status.emoji} {status.text}

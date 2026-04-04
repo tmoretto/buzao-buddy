@@ -1,9 +1,5 @@
-import { NearbyStops } from "@/components/NearbyStops";
+import { HomeClient } from "@/components/HomeClient";
 
 export default function Home() {
-  return (
-    <main className="h-full flex flex-col">
-      <NearbyStops />
-    </main>
-  );
+  return <HomeClient />;
 }
